@@ -1,0 +1,37 @@
+name: 签到脚本重放测试
+category: AA测试执行脚本
+author: 007Mini
+desc: 测试执行脚本-面板模版，按需启用，面板加载或刷新即执行目标脚本，测试完成后停用。URL 留空使用本地 path；填写 URL 后 path 是远程缓存位置，禁止指向需保留的本地脚本。目标日志在脚本日志中查看。
+icon: https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/icon/Firework.png
+arguments-version: 1
+arguments:
+  script_path:
+    type: input
+    title: 本地脚本路径／远程缓存路径
+    default: ./scripts/replay-target.js
+    description: 本地模式填写现有 JS 路径；远程模式建议保持默认专用缓存路径，避免覆盖本地脚本。
+  script_url:
+    type: input
+    title: 远程 JS 地址（本地模式留空）
+    default: ''
+    description: 留空使用本地文件。填写后从远程下载；切换地址后请更新对应远程脚本，避免运行旧缓存。
+  argument:
+    type: input
+    title: 目标脚本参数（可留空）
+    default: ''
+    description: 原样作为目标脚本的 $argument；不填路径或代码，不需要参数就留空。
+tiles:
+  - name: replay-target
+    interval: 86400
+    title: 签到脚本重放测试
+    content: 点击本面板右上角刷新重放签到脚本，结果查看通知或日志；测试后停用。
+    collapsed: false
+    icon: arrow.clockwise
+    backgroundColor: '#4169A1'
+    argument: '${args.argument}'
+script-providers:
+  replay-target:
+    path: '${args.script_path}'
+    url: '${args.script_url}'
+    interval: 86400
+
