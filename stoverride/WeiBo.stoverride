@@ -1,0 +1,299 @@
+name: 微博
+desc: 微博全面净化
+author: RuCu6, zmqcherish, 可莉, 007Mini
+icon: https://raw.githubusercontent.com/sooyaaabo/IconLibrary/main/App/WeiBo.png
+arguments-version: 1
+arguments:
+  MainTabFilter:
+    type: select
+    title: 顶部 Tab 过滤
+    description: 控制顶部Tab页分组过滤
+    default: '(?i)^'
+    options:
+      - value: '(?i)^'
+        label: 开启
+      - value: '^$'
+        label: 关闭
+# MainTabFilter 控制原插件 fmz200 顶部 Tab 过滤，默认开启。
+# URL-REGEX 的 REJECT-DROP 以 HTTP reject 近似适配。
+rules:
+  - DOMAIN-SUFFIX,alitui.weibo.com,REJECT
+  - DOMAIN-SUFFIX,beacon.sina.com.cn,REJECT
+  - DOMAIN-SUFFIX,biz.weibo.com,REJECT
+  - DOMAIN,dns.weibo.cn,REJECT
+  - DOMAIN,huodong.weibo.cn,REJECT
+  - DOMAIN,sax.sina.com.cn,REJECT
+  - DOMAIN,saxn.sina.com.cn,REJECT
+  - DOMAIN,saxs.sina.com.cn,REJECT
+  - DOMAIN,u1.img.mobile.sina.cn,REJECT
+  - DOMAIN,bootpreload.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,fastimage.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,adimg.vue.weibo.com,REJECT
+  - DOMAIN-SUFFIX,zymo.mps.weibo.com,REJECT
+  - DOMAIN-SUFFIX,weibomingzi.com,REJECT
+  - DOMAIN-SUFFIX,sdkapp.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,promote.biz.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,gw5.push.mcp.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,gw6.push.mcp.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,game.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,adimg.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,game.weibo.com,REJECT
+  - DOMAIN-SUFFIX,ads.viber.com,REJECT
+  - DOMAIN-SUFFIX,ads-d.viber.com,REJECT
+  - DOMAIN-SUFFIX,ads.aws.viber.com,REJECT
+  - DOMAIN-SUFFIX,dp.im.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,click.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,wax.weibo.com,REJECT
+  - DOMAIN-SUFFIX,wbapp.uve.weibo.com,REJECT
+  - DOMAIN-SUFFIX,widget.weibo.com,REJECT
+  - DOMAIN-SUFFIX,dsp.edm.weibo.cn,REJECT
+  - DOMAIN-SUFFIX,alitui.weibo.com.cn,REJECT
+  - DOMAIN-SUFFIX,tui.weibo.com,REJECT
+  - DOMAIN-SUFFIX,wax.weibo.com.cn,REJECT
+  - DOMAIN-SUFFIX,ad.weibo.com,REJECT
+  - DOMAIN,datacollection.uve.weibo.com,REJECT
+  - DOMAIN,adpinpai.video.weibocdn.com,REJECT
+http:
+  mitm:
+    - '*.weibo.cn'
+    - '*.weibo.com'
+    - weibo.com
+  url-rewrite:
+    - ^https?://m?api\.weibo\.c(n|om)/2/(push/active|client/addlog_batch|ad/preload) - reject
+    - ^https?://api-cloudim\.api\.weibo\.com/v1/log/ - reject
+    - (?i)^https?://m?api\.weibo\.c(n|om)/2/logservice/service\? - reject
+  script:
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/(?:ug/checkin/list|push/daily|push/info)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/!/live/media_homelist\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/comments/bullet_screens\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/photo/info\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/statuses/(?:container_positive|push_info)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/vote/get_vote_detail\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/!/chaohua/discovery/home_bottom/switch\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/!/huati/(?:discovery_home_bottom_channels|discovery_home_bottom_getdotinfo|mobile_discovery_searchchange)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/!/wbox/\w+/(?:home_bottom_modal|interest_category)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/search/(?:container_discover|finder_nav_polling)\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/hot/hours_spotlight\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/video/redpacket\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/!/(?:search/finder_nav_polling|sug/list/finderchange|was/finder/searchbarchange)\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/cardlist\?
+      name: weibo-cardlist-filter
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.c(n|om)/2/video/tiny_video_info_show\?
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://(?:bootrealtime|bootpreload)\.uve\.weibo\.com/v\d/ad/(?:realtime|preload)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://sdkapp\.uve\.weibo\.com/interface/sdk/(?:get-lbs-cell-info\.php|sdkconfig\.php)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://card\.weibo\.com/article/m/aj/(?:reward|uvead)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: (?i)^https://weibo\.com/ttarticle/x/m/aj/(?:reward|uvead)
+      name: weibo-empty-json
+      type: request
+      require-body: false
+      timeout: 60
+    - match: '${args.MainTabFilter}https://m?api\.weibo\.c(n|om)/2/groups/allgroups/v2\?'
+      name: weibo-fmz200
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/(?:checkin/show|client/publisher_list|push/active)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/groups/allgroups/v2\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/(?:cardlist|page)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/comments/build_comments\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/(?:container/asyn|flowlist|flowpage)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/friendships/(?:create|destroy)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/profile/(?:container_timeline|dealatt|me|statuses/tab|userinfo)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/shproxy/chaohua/discovery/searchactive\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/statuses/(?:comments_expand_child|container_detail_comment)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/statuses/(?:container_detail\?|container_timeline(?:_hot|_topic|_topicpage|_unread)?|repost_timeline|unread_hot_timeline)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/statuses/(?:extend|show)\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/video/(?:full_screen_stream|tiny_stream_mid_detail|tiny_stream_video_list)\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/!/huati/discovery_home_bottom_channels\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/direct_messages/user_list\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/messageflow/notice\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https?://m?api\.weibo\.c(n|om)/2/search/(?:finder|container_timeline|container_discover)\?
+      name: weibo-discovery
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://m?api\.weibo\.cn/2/searchall\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://bootpreload\.uve\.weibo\.com/v[12]/ad/preload
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://sdkapp\.uve\.weibo\.com/interface/sdk/sdkad\.php
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://wbapp\.uve\.weibo\.com/(?:preload/get_ad|wbapplua/wbpullad\.lua)
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+    - match: (?i)^https://new\.vip\.weibo\.cn/aj/appicon/list\?
+      name: weibo-rucu6
+      type: response
+      require-body: true
+      timeout: 60
+script-providers:
+  weibo-empty-json:
+    payload: '$done({response: {status: 200, headers: {"Content-Type": "application/json; charset=utf-8"}, body: "{}"}});'
+  weibo-cardlist-filter:
+    payload: |-
+      try {
+        var obj = JSON.parse($response.body);
+        if (Array.isArray(obj.items)) {
+          obj.items = obj.items.filter(function (item) {
+            return !item || item.category !== "group";
+          });
+          $done({body: JSON.stringify(obj)});
+        } else {
+          $done({});
+        }
+      } catch (error) {
+        console.log("WeiBo cardlist: " + error);
+        $done({});
+      }
+  weibo-fmz200:
+    url: https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js
+    interval: 86400
+  weibo-rucu6:
+    url: https://rucu6.pages.dev/Scripts/weibo.js
+    interval: 86400
+  weibo-discovery:
+    url: https://loon.103516.xyz/Script/WeiBo/WeiBo.ads.js
+    interval: 86400
+category: 去广告
