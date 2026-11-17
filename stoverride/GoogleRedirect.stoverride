@@ -1,5 +1,5 @@
 name: Google重定向
-desc: 将 google.cn、g.cn、google.com.hk 的根域名和 www 域名重定向到 www.google.com，保留路径和查询参数。自制覆写，非 Google 或 Stash 官方资源。
+desc: 将 google.cn、g.cn的根域名和 www 域名重定向到 www.google.com，保留路径和查询参数。自制覆写，非 Google 或 Stash 官方资源。
 author: 007Mini
 http:
   mitm:
