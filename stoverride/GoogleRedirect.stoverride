@@ -1,0 +1,18 @@
+name: Google重定向
+desc: 将 google.cn、g.cn、google.com.hk 的根域名和 www 域名重定向到 www.google.com，保留路径和查询参数。自制覆写，非 Google 或 Stash 官方资源。
+author: 007Mini
+http:
+  mitm:
+    - google.cn
+    - www.google.cn
+    - g.cn
+    - www.g.cn
+  force-http-engine:
+    - google.cn:80
+    - www.google.cn:80
+    - g.cn:80
+    - www.g.cn:80
+  url-rewrite:
+    - '^https?://(?:www\.)?(?:google\.cn|g\.cn|google\.com)(/.*)?$ https://www.google.com$1 302'
+category: 工具
+icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google_Search.png
