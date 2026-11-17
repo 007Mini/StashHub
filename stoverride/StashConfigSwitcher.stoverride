@@ -11,9 +11,9 @@ dns: #!replace
   fake-ip-filter: ['+.lan', '*', '+.local', '+.cmpassport.com', 'id6.me', 'open.e.189.cn', 'mdn.open.wo.cn', 'opencloud.wostore.cn', 'auth.wosms.cn', '+.10099.com.cn', '+.msftconnecttest.com', '+.msftncsi.com', 'lancache.steamcontent.com']
 
 proxy-groups: #!replace
-  - {name: Manual, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png, type: select, include-all: true, proxies: [HongKong, United States, Singapore, Japan, Taiwan, DIRECT]}
+  - {name: Manual, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png, type: select, include-all: true, proxies: [HongKong, United States, Singapore, Japan, Taiwan]}
 
-  - {name: Final, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/friestash.png, type: select, proxies: [Manual, HongKong, United States, Singapore, Japan, Taiwan, DIRECT]}
+  - {name: Final, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/friestash.png, type: select, proxies: [Manual, HongKong, United States, Singapore, Japan, Taiwan]}
 
   - {name: HongKong, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png, type: url-test, interval: 300, include-all: true, filter: "(?i)🇭🇰|香港|(\b(HK|Hong)\b)"}
 
