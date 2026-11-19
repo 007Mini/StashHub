@@ -5,6 +5,13 @@ desc:  |-
   最后更新时间: 2026-11-19 11:35:07
 icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png
 
+# ===== 内置 Tailscale 节点 =====
+# 授权方式：保存配置后，在 Stash 里找到 Tailnet 节点 -> 节点菜单 -> Tailscale Authentication 登录
+proxies:
+  - name: Tailnet
+    type: tailscale
+    ephemeral: false
+
 proxy-groups: #!replace
 
   - {name: Manual, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png, type: select, include-all: true, proxies: [HongKong, United States, Singapore, Japan, Taiwan, Others]}
@@ -31,7 +38,7 @@ rule-providers: #!replace
 
 # ===== DNS 覆写：Tailscale 相关域名不做 fake-ip 劫持 =====
 # 作用：让这些域名解析出真实 IP，否则 tailscaled 拿到 198.18.x.x 假地址会直连超时
-dns: #!replace
+dns:
   fake-ip-filter:
     - '+.tailscale.com'        # 控制服务器 / 登录认证
     - '+.tailscale.io'         # 基础设施（中继协调等）
@@ -53,7 +60,6 @@ rules: #!replace
   - IP-CIDR,100.64.0.0/10,Tailnet,no-resolve
   - IP-CIDR6,fd7a:115c:a1e0::/48,Tailnet,no-resolve
   - DOMAIN-SUFFIX,ts.net,Tailnet
-
 
   - RULE-SET,Direct,DIRECT
   - RULE-SET,Reject,REJECT
