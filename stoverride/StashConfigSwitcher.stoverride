@@ -1,16 +1,12 @@
 name: Stash 配置转换
 desc:  |-
-  通用配置，使用此覆写会覆盖原配置对应字段的内容
+  使用此覆写会覆盖原配置对应字段的内容，增加Tailscale配置
   作者: @007Mini
-  最后更新时间: 2026-11-16 13:31:59
+  最后更新时间: 2026-11-19 11:35:07
 icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png
 
-
-dns: #!replace
-  nameserver: [223.5.5.5, 119.29.29.29]
-  fake-ip-filter: ['+.lan', '*', '+.local', '+.cmpassport.com', 'id6.me', 'open.e.189.cn', 'mdn.open.wo.cn', 'opencloud.wostore.cn', 'auth.wosms.cn', '+.10099.com.cn', '+.msftconnecttest.com', '+.msftncsi.com', 'lancache.steamcontent.com']
-
 proxy-groups: #!replace
+
   - {name: Manual, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png, type: select, include-all: true, proxies: [HongKong, United States, Singapore, Japan, Taiwan, Others]}
 
   - {name: Final, icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/friestash.png, type: select, proxies: [Manual, HongKong, United States, Singapore, Japan, Taiwan, Others]}
@@ -28,11 +24,37 @@ proxy-groups: #!replace
   - {name: Others, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/European_Union.png, type: url-test, interval: 300, include-all: true, filter: "^(?!.*(剩余|距离|套餐|官网|港|台|日|新|狮|獅|荷|美|HK|US|TW|JP|SG|Hong|Tai|Japan|Singapore|States))"}
 
 rule-providers: #!replace
+
   Direct: {behavior: classical, format: text, interval: 86400, url: https://github.com/Repcz/Tool/raw/X/Stash/Rules/Direct.list}
   Lan: {behavior: classical, format: text, interval: 86400, url: https://github.com/Repcz/Tool/raw/X/Stash/Rules/Lan.list}
   Reject: {behavior: classical, format: text, interval: 86400, url: https://github.com/Repcz/Tool/raw/X/Stash/Rules/Reject.list}
 
+# ===== DNS 覆写：Tailscale 相关域名不做 fake-ip 劫持 =====
+# 作用：让这些域名解析出真实 IP，否则 tailscaled 拿到 198.18.x.x 假地址会直连超时
+dns: #!replace
+  fake-ip-filter:
+    - '+.tailscale.com'        # 控制服务器 / 登录认证
+    - '+.tailscale.io'         # 基础设施（中继协调等）
+    - '+.ts.net'               # MagicDNS 设备域名
+    - '+.derp.tailscale.com'   # DERP 中继节点
+
+# ===== 规则覆写：Tailscale 流量放行 =====
 rules: #!replace
+  # 放行 Tailscale 后台进程的直连流量（仅 Windows/Mac 桌面端有意义）
+  - PROCESS-NAME,tailscaled.exe,DIRECT
+  # tailnet 虚拟网段
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  # 域名兜底放行
+  - DOMAIN-SUFFIX,tailscale.com,DIRECT
+  - DOMAIN-SUFFIX,tailscale.io,DIRECT
+  - DOMAIN-SUFFIX,ts.net,DIRECT
+
+  # iPhone 上删掉以上五行规则，保留下面三行；tailnet 网段指向内置 Tailscale 节点
+  - IP-CIDR,100.64.0.0/10,Tailnet,no-resolve
+  - IP-CIDR6,fd7a:115c:a1e0::/48,Tailnet,no-resolve
+  - DOMAIN-SUFFIX,ts.net,Tailnet
+
+
   - RULE-SET,Direct,DIRECT
   - RULE-SET,Reject,REJECT
   - RULE-SET,Lan,DIRECT
